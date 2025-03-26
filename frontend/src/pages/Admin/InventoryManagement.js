@@ -10,12 +10,14 @@ import { useAuth } from "../../contexts/AuthProvider"
 import useFetch from "../../hooks/useFetch"
 
 const InventoryManagement = () => {
+
   const { token } = useAuth()
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [formMode, setFormMode] = useState("add")
   const [refreshFlag, setRefreshFlag] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [newProduct, setNewProduct] = useState({
+
     product: null,
     productPreview: null,
     itemName: "",
@@ -77,7 +79,7 @@ const InventoryManagement = () => {
       throw error
     }
   }
-
+ /*update*/
   const updateItem = async (id, item) => {
     try {
       const response = await api.put(
@@ -106,6 +108,7 @@ const InventoryManagement = () => {
     }
   }
 
+  /*delete */ 
   const deleteItem = async (id) => {
     try {
       const response = await api.delete(`/api/items/${id}`, {}, token)
@@ -120,6 +123,7 @@ const InventoryManagement = () => {
     }
   }
 
+  /*image*/
   const handleImageChange = (e) => {
     const file = e.target.files[0]
     const reader = new FileReader()
@@ -164,6 +168,8 @@ const InventoryManagement = () => {
     setIsFormOpen(true)
   }
 
+
+  /*restock*/ 
   const handleRestockClick = (index) => {
     setFormMode("restock")
     const product = productData.body[index]
@@ -296,7 +302,7 @@ const InventoryManagement = () => {
               product.category,
               product.description,
               Array.isArray(product.colors) ? product.colors.join(", ") : "",
-              `$${product.price}`,
+              `LKR ${product.price}`,
               product.size,
               product.quantity,
               <StockStatus stock={product.stock} />,
@@ -336,7 +342,7 @@ const InventoryManagement = () => {
               {(formMode === "add" || formMode === "edit") && (
                 <>
                   <label>
-                    Image:*
+                    Image:<span className="required">*</span>
                     <input
                       type="file"
                       name="product"
@@ -353,7 +359,7 @@ const InventoryManagement = () => {
                     )}
                   </label>
                   <label>
-                    Product Name:*
+                    Product Name:<span className="required">*</span>
                     <input
                       type="text"
                       name="itemName"
@@ -363,7 +369,7 @@ const InventoryManagement = () => {
                     />
                   </label>
                   <label>
-                    Category:*
+                    Category:<span className="required">*</span>
                     <select
                       name="category"
                       value={newProduct.category}
@@ -378,7 +384,7 @@ const InventoryManagement = () => {
                     </select>
                   </label>
                   <label>
-                    Description:*
+                    Description:<span className="required">*</span>
                     <input
                       type="text"
                       name="description"
@@ -388,7 +394,7 @@ const InventoryManagement = () => {
                     />
                   </label>
                   <label>
-                    Colors (comma-separated):*
+                    Colors (comma-separated):<span className="required">*</span>
                     <input
                       type="text"
                       name="colors"
@@ -402,7 +408,7 @@ const InventoryManagement = () => {
                     />
                   </label>
                   <label>
-                    Price:*
+                    Price:<span className="required">*</span>
                     <input
                       type="number"
                       name="price"
@@ -414,7 +420,7 @@ const InventoryManagement = () => {
                     />
                   </label>
                   <label>
-                    Size (comma-separated):*
+                    Size:<span className="required">*</span>
                     <input
                       type="text"
                       name="size"
@@ -426,7 +432,7 @@ const InventoryManagement = () => {
                 </>
               )}
               <label>
-                Quantity:*
+                Quantity:<span className="required">*</span>
                 <input
                   type="number"
                   name="quantity"
@@ -438,7 +444,7 @@ const InventoryManagement = () => {
               </label>
               {(formMode === "add" || formMode === "edit") && (
                 <label>
-                  Stock Status:*
+                  Stock Status:<span className="required">*</span>
                   <select
                     name="stock"
                     value={newProduct.stock}

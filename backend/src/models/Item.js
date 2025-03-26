@@ -8,6 +8,7 @@ const item = new Schema({
     itemName: {
         type: String,
         required: true,
+        unique:[true, "Item already exist with this name"],
     },
     category: {
         type: String,
@@ -16,6 +17,7 @@ const item = new Schema({
     description: {
         type: String,
         required: true,
+        maxlength
     },
     colors: {
         type: [String],
