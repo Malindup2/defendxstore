@@ -17,6 +17,7 @@ import "./Profile.css"
 import TabMenu from "../../components/TabMenu"
 import TabItem from "../../components/TabMenu/TabItem"
 import Reviews from "./Reviews"
+import OrderMenu from "./OrderMenu"
 import { useRef, useState } from "react"
 import api from "../../utils/api"
 import OverlayWindow from "../../components/OverlayWindow"
@@ -25,11 +26,13 @@ import MessageBox from "../../components/MessageBox"
 import DeleteAccountForm from "../../forms/DeleteAccountForm"
 import ChangeBillingInformationForm from "../../forms/ChangeBillingInformationForm"
 import useFetch from "../../hooks/useFetch"
+import { useNavigate } from "react-router-dom"
 
 const { REACT_APP_API_URL } = process.env
 
 export default function Profile() {
-  const { user, token } = useAuth()
+  const navigate = useNavigate()
+  const { user, token, logoutAction } = useAuth()
   const [isError, setIsError] = useState(false)
   const [message, setMessage] = useState(null)
   const [isPassswordFormOpen, setIsPasswordFormOpen] = useState(false)
@@ -84,6 +87,10 @@ export default function Profile() {
           setIsOpen={setIsDeleteAccountFormOpen}
           setIsError={setIsError}
           setMessage={setMessage}
+          onSuccess={() => {
+            navigate("/")
+            logoutAction()
+          }}
         />
       </OverlayWindow>
       <OverlayWindow
@@ -174,7 +181,7 @@ export default function Profile() {
         </aside>
         <div className="profile-content">
           <TabMenu>
-            <TabItem name="Orders" />
+            <TabItem name="Orders" element={<OrderMenu />} />
             <TabItem name="Reviews" element={<Reviews />} />
           </TabMenu>
         </div>
