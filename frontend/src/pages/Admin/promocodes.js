@@ -10,6 +10,8 @@ import api from "../../utils/api"
 import { useRef, useState } from "react"
 import { useAuth } from "../../contexts/AuthProvider"
 
+import "./promocodes.css"
+
 const { REACT_APP_API_URL } = process.env
 
 function PromoCodeRow({ row, index }) {
@@ -18,9 +20,31 @@ function PromoCodeRow({ row, index }) {
   const codeRef = useRef()
   const validUntilRef = useRef()
   const discountRef = useRef()
+  const [codeError, setCodeError] = useState(null)
+  const [validUntilError, setValidUntilError] = useState(null)
+  const [discountError, setDiscountError] = useState(null)
 
   const upsertCode = async (evt, method) => {
     evt.preventDefault()
+
+    console.log(codeRef.current.value)
+
+    if (!codeRef.current.value) return setCodeError("Code cannot be empty")
+    if (codeRef.current.value.length < 3)
+      return setCodeError("Code cannot be less than 3 characters")
+    if (codeRef.current.value.length > 20)
+      return setCodeError("Code cannot be more than 20 characters")
+    if (!validUntilRef.current.value)
+      return setValidUntilError("Valid until cannot be empty")
+    if (!discountRef.current.value)
+      return setDiscountError("Discount cannot be empty")
+    if (discountRef.current.value < 0)
+      return setDiscountError("Discount cannot be negative")
+
+    setCodeError(null)
+    setValidUntilError(null)
+    setDiscountError(null)
+
     const response = await api[method](
       "/api/promo" + (method == "put" ? `/${row.code}` : ""),
       {
@@ -80,6 +104,8 @@ function PromoCodeRow({ row, index }) {
           placeholder="Promotion code"
           defaultValue={row.code}
           ref={codeRef}
+          error={codeError}
+          width={250}
           required
         />
       </td>
@@ -89,6 +115,8 @@ function PromoCodeRow({ row, index }) {
           placeholder="Valid until"
           defaultValue={row.validUntil?.split("T")?.[0]}
           ref={validUntilRef}
+          error={validUntilError}
+          width={250}
           required
         />
       </td>
@@ -98,6 +126,9 @@ function PromoCodeRow({ row, index }) {
           placeholder="Discount"
           defaultValue={row.discount}
           ref={discountRef}
+          error={discountError}
+          width={250}
+          min={0}
           required
         />
       </td>
@@ -140,22 +171,29 @@ export default function PromoCodes() {
         <div className="promocodes-actions">
           <SearchBar placeholder={"Promocodes"} />
         </div>
-
-        <Table
-          headers={["Promocode", "Valid until", "Discount", "Created for", ""]}
-          rows={[{}, ...(codes?.body || [])].map((code) => ({
-            code: code.promocode,
-            validUntil: code.validuntil,
-            discount: code.discount,
-            createdFor: code.createdFor,
-            isError,
-            setIsError,
-            setMessage,
-            refreshList,
-            setRefreshList,
-          }))}
-          renderRowWith={PromoCodeRow}
-        />
+        <div className="promocodes-table">
+          <Table
+            headers={[
+              "Promocode",
+              "Valid until",
+              "Discount",
+              "Created for",
+              "",
+            ]}
+            rows={[{}, ...(codes?.body || [])].map((code) => ({
+              code: code.promocode,
+              validUntil: code.validuntil,
+              discount: code.discount,
+              createdFor: code.createdFor,
+              isError,
+              setIsError,
+              setMessage,
+              refreshList,
+              setRefreshList,
+            }))}
+            renderRowWith={PromoCodeRow}
+          />
+        </div>
       </div>
     </>
   )

@@ -11,6 +11,7 @@ import {
   faMap,
   faPhone,
   faRoute,
+  faTrash,
   faTruck,
 } from "@fortawesome/free-solid-svg-icons"
 import Button from "../Button"
@@ -172,6 +173,14 @@ export default function Order({
     if (setRefreshOrders) setRefreshOrders(!refreshOrders)
   }
 
+  const deleteOrder = async () => {
+    const response = await api.delete(`/api/orders/${order._id}`, {}, token)
+    const result = await response.json()
+    setIsError(!response.ok)
+    setMessage(result.body || response.statusText)
+    if (setRefreshOrders) setRefreshOrders(!refreshOrders)
+  }
+
   const getDirections = async () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -236,21 +245,29 @@ export default function Order({
       <div className="profile-order-container container">
         <div className="order-header">
           <div>
-            <a href={`invoice?id=${order._id}`}>
+            <a href={`/invoice?id=${order._id}`}>
               #{order._id} <FontAwesomeIcon icon={faChevronRight} />
             </a>
           </div>
-          <div
-            className="order-status"
-            style={{
-              backgroundColor: {
-                pending: "#FACC15", // amber-400
-                on_the_way: "#38BDF8", // sky-400
-                delivered: "#4ADE80", // green-400
-              }[order.status],
-            }}
-          >
-            {order.status.toUpperCase().replaceAll("_", " ")}
+          <div style={{ display: "flex" }}>
+            {order.status === "delivered" && (
+              <Button kind="danger-secondary" onClick={deleteOrder}>
+                <FontAwesomeIcon icon={faTrash} /> Delete order
+              </Button>
+            )}
+
+            <div
+              className="order-status"
+              style={{
+                backgroundColor: {
+                  pending: "#FACC15", // amber-400
+                  on_the_way: "#38BDF8", // sky-400
+                  delivered: "#4ADE80", // green-400
+                }[order.status],
+              }}
+            >
+              {order.status.toUpperCase().replaceAll("_", " ")}
+            </div>
           </div>
         </div>
         <div className="order-body">
@@ -323,7 +340,7 @@ export default function Order({
                       <b>{item.itemName}</b> ({item.size})
                     </div>
                     <div>
-                      LKR {item.price}{" "}
+                      LKR {item.price?.toFixed(2)}{" "}
                       <span className="secondary-text"> x {item.quantity}</span>
                     </div>
                   </div>
@@ -333,7 +350,7 @@ export default function Order({
             <br />
             <hr />
             <div>
-              Total: <b>LKR {order.price}</b>
+              Total: <b>LKR {order.price.toFixed(2)}</b>
             </div>
             <br />
             <div className="order-footer">
