@@ -257,17 +257,17 @@ export default function Header() {
             <li>
               <Link to="/profile">My profile</Link>
             </li>
-            {user?.roles.includes("ADMIN") && (
+            {user?.roles?.includes("ADMIN") && (
               <li>
                 <Link to="/admin">Admin dashboard</Link>
               </li>
             )}
-            {user?.roles.includes("DELIVERY_AGENT") && (
+            {user?.roles?.includes("DELIVERY_AGENT") && (
               <li>
                 <Link to="delivery/dashboard">Delivery dashboard</Link>
               </li>
             )}
-            {user?.roles.includes("SUPPORT_AGENT") && (
+            {user?.roles?.includes("SUPPORT_AGENT") && (
               <li>
                 <Link to="support/dashboard">Support dashboard</Link>
               </li>
@@ -296,17 +296,17 @@ export default function Header() {
             <li>
               <Link to="cart">View cart</Link>
             </li>
-            {user?.roles.includes("ADMIN") && (
+            {user?.roles?.includes("ADMIN") && (
               <li>
                 <Link to="admin">Admin dashboard</Link>
               </li>
             )}
-            {user?.roles.includes("DELIVERY_AGENT") && (
+            {user?.roles?.includes("DELIVERY_AGENT") && (
               <li>
                 <Link to="delivery/dashboard">Delivery dashboard</Link>
               </li>
             )}
-            {user?.roles.includes("SUPPORT_AGENT") && (
+            {user?.roles?.includes("SUPPORT_AGENT") && (
               <li>
                 <Link to="support/dashboard">Support dashboard</Link>
               </li>

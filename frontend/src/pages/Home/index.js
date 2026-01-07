@@ -14,10 +14,118 @@ import white from "../../assets/images/white.jpg"
 import pro1 from "../../assets/images/pro1.png"
 import pro2 from "../../assets/images/pro2.png"
 import pro3 from "../../assets/images/pro3.png"
+import item1 from "../../assets/images/item1.jpg"
+import item2 from "../../assets/images/item2.jpg"
+import item3 from "../../assets/images/item3.jpg"
+import item4 from "../../assets/images/item4.jpg"
+import item5 from "../../assets/images/item5.jpg"
 import useFetch from "../../hooks/useFetch"
 import { useAuth } from "../../contexts/AuthProvider"
 
 const { REACT_APP_API_URL } = process.env
+
+// Sample demo data for trending items
+const sampleTrendingItems = [
+  {
+    _id: "demo-1",
+    itemName: "Premium Sports Hoodie",
+    category: "Activewear",
+    price: 4500,
+    product: item1,
+  },
+  {
+    _id: "demo-2",
+    itemName: "Classic Comfort Tee",
+    category: "T-Shirts",
+    price: 2500,
+    product: item2,
+  },
+  {
+    _id: "demo-3",
+    itemName: "Athletic Training Gear",
+    category: "Activewear",
+    price: 5500,
+    product: item3,
+  },
+  {
+    _id: "demo-4",
+    itemName: "Casual Streetwear",
+    category: "Casual",
+    price: 3500,
+    product: item4,
+  },
+]
+
+// Sample demo data 
+const sampleRecommendedItems = [
+  {
+    _id: "demo-rec-1",
+    itemName: "DefendX Signature Shirt",
+    category: "Premium",
+    price: 3200,
+    product: item5,
+  },
+  {
+    _id: "demo-rec-2",
+    itemName: "Workout Performance Top",
+    category: "Activewear",
+    price: 4200,
+    product: item1,
+  },
+  {
+    _id: "demo-rec-3",
+    itemName: "Urban Style Hoodie",
+    category: "Hoodies",
+    price: 4800,
+    product: item3,
+  },
+]
+
+// Sample demo data for all products
+const sampleAllProducts = [
+  {
+    _id: "demo-all-1",
+    itemName: "Premium Sports Hoodie",
+    category: "Activewear",
+    price: 4500,
+    product: item1,
+  },
+  {
+    _id: "demo-all-2",
+    itemName: "Classic Comfort Tee",
+    category: "T-Shirts",
+    price: 2500,
+    product: item2,
+  },
+  {
+    _id: "demo-all-3",
+    itemName: "Athletic Training Gear",
+    category: "Activewear",
+    price: 5500,
+    product: item3,
+  },
+  {
+    _id: "demo-all-4",
+    itemName: "Casual Streetwear",
+    category: "Casual",
+    price: 3500,
+    product: item4,
+  },
+  {
+    _id: "demo-all-5",
+    itemName: "DefendX Signature Shirt",
+    category: "Premium",
+    price: 3200,
+    product: item5,
+  },
+  {
+    _id: "demo-all-6",
+    itemName: "Performance Training Set",
+    category: "Activewear",
+    price: 6500,
+    product: item2,
+  },
+]
 
 const Home = () => {
   const { user } = useAuth()
@@ -134,7 +242,10 @@ const Home = () => {
             Recommended <span className="secondary-text">Items</span>{" "}
           </h3>
           <div className="catalog">
-            {recommendedItems.body?.map((item, index) => (
+            {(recommendedItems.body && recommendedItems.body.length > 0
+              ? recommendedItems.body
+              : sampleRecommendedItems
+            ).map((item, index) => (
               <Productcard
                 itemName={item.itemName}
                 category={item.category}
@@ -154,7 +265,10 @@ const Home = () => {
             Trending <span className="secondary-text">Products</span>
           </h3>
           <div className="catalog">
-            {trendingItems?.body?.map((item, index) => (
+            {(trendingItems?.body && trendingItems.body.length > 0
+              ? trendingItems.body
+              : sampleTrendingItems
+            ).map((item, index) => (
               <Productcard
                 itemName={item.itemName}
                 category={item.category}
@@ -238,7 +352,10 @@ const Home = () => {
               </p>
             </div>
           ) : (
-            items?.body?.map((item, index) => (
+            (items?.body && items.body.length > 0
+              ? items.body
+              : sampleAllProducts
+            ).map((item, index) => (
               <Productcard
                 itemName={item.itemName}
                 category={item.category}

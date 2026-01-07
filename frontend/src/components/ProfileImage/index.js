@@ -42,7 +42,7 @@ export default function ProfileImage({ image, username, size, style }) {
           ...style,
         }}
       >
-        {username.charAt(0).toUpperCase()}
+        {username?.charAt(0)?.toUpperCase() || "?"}
       </div>
     )
   }
